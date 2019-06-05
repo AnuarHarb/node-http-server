@@ -2,18 +2,20 @@ const http = require('http');
 const fs = require('fs');
 const port = 8000;
 
+const historia = 'Había una vez, un pato que se llamaba resistol, se cayó de un árbol y se pegó';
+
 
 const server = http.createServer(manejadorDeRespuesta);
 
 function manejadorDeRespuesta(req, res){
-  fs.access('static/index.html', fs.constants.F_OK, function(err) {
-    if(err) {
-      res.write('El archivo no existe');
-      res.end();
-    } else {
-      res.write('El archivo si exite');
-      res.end();
+  fs.readFile('static/index.html', 'utf-8', function(err, contenido) {
+    if(err) {
+      throw err;
     }
+
+    res.writeHeader(200, {"Content-Type": "text/html"});
+    res.write(contenido);
+    res.end();
   })
 }
 
